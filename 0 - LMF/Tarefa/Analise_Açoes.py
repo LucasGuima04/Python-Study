@@ -1,5 +1,4 @@
 
-
 acoes = ["Ticker","Nome","Negócios","Última (R$)","Variação", 
 "AZUL4","Azul","91.555.700","1,04","-2,80%",
 "HAPV3","Hapvida","76.039.400","2,84","+0,00%",
