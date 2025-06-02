@@ -403,11 +403,8 @@ acoes = ["Ticker","Nome","Negócios","Última (R$)","Variação",
 "BALM3","Baumer","100","16,30","-1,81%"
 ]
 
-def analisar_acoes(lista_acoes_completa):
-    """
-    Analisa uma lista de dados de ações, encontra as 5 com maior número de negócios
-    e imprime seus nomes e tickers.
-    """
+def analisarAcoes(lista_acoes_completa):
+
     # 2. Definir o número de colunas e pular o cabeçalho
     num_colunas = 5
     # Os primeiros 'num_colunas' elementos são o cabeçalho, então pulamos eles.
@@ -461,5 +458,97 @@ def analisar_acoes(lista_acoes_completa):
         # O campo 'negocios' é formatado com separador de milhar para melhor leitura.
         print(f"\n{i+1}. Nome: {acao['nome']}, Ticker: {acao['ticker']}, Negócios: {acao['negocios']:,}")
 
-# Chamar a função para executar a análise
-analisar_acoes(acoes)
+def acoesPositivas(lista_acoes_completa):
+    # 2. Definir o número de colunas e pular o cabeçalho
+    num_colunas = 5
+    # Os primeiros 'num_colunas' elementos são o cabeçalho, então pulamos eles.
+    dados_acoes_lista_plana = lista_acoes_completa[num_colunas:]
+
+    # 3. Processar os dados das ações e armazenar temporariamente
+    lista_de_acoes_processadas = []
+
+    # Iteramos sobre a lista plana, pegando 'num_colunas' elementos de cada vez
+    for i in range(0, len(dados_acoes_lista_plana), num_colunas):
+        # Garante que temos um bloco completo de dados para uma ação
+        if i + num_colunas <= len(dados_acoes_lista_plana):
+            bloco_acao = dados_acoes_lista_plana[i : i + num_colunas]
+
+            ticker = bloco_acao[0]
+            variacaopos_str = bloco_acao[4]
+
+            try:
+                # Limpar a string de variação e converter para float
+                variacaopos_str = variacaopos_str.replace('%','').replace('+', '').replace(",",".")
+                variacaopos_int = float(variacaopos_str)
+                
+
+                # Adicionar um dicionário com as informações processadas à lista
+                lista_de_acoes_processadas.append({
+                    "ticker": ticker,
+                    "variacao": variacaopos_int  # Armazenamos como inteiro para ordenação
+                })
+            except ValueError:
+                # Se houver erro na conversão (ex: valor não numérico inesperado)
+                print(f"Aviso: Dado de 'variacao' inválido para {ticker}: '{variacaopos_str}'. Pulando este registro.")
+            except IndexError:
+                # Se o bloco_acao não tiver todos os elementos esperados (final da lista incompleto)
+                print(f"Aviso: Registro incompleto no final da lista, começando com {bloco_acao[0] if len(bloco_acao) > 0 else 'N/A'}. Pulando.")
+
+
+    # 4. Ordenar as ações de maior variação (em ordem decrescente)
+    # Usamos uma função lambda como 'key' para especificar que queremos ordenar
+    # pelos valores da chave 'variacao' em cada dicionário.
+    # 'reverse=True' garante a ordem decrescente.
+    acoes_ordenadas = sorted(lista_de_acoes_processadas, key=lambda acao: acao["variacao"], reverse=True)
+
+
+    print("--- Ações com Variação Positiva ---")
+
+    contador_positivas = 0
+    for acao in acoes_ordenadas:
+        # Condição para imprimir apenas ações com variação positiva
+        if acao['variacao'] > 0:
+            contador_positivas += 1
+            # Formata a variação para duas casas decimais e adiciona o '%'
+            print(f"{contador_positivas}. Ticker: {acao['ticker']}, Variação: +{acao['variacao']:.2f}%")
+
+    if contador_positivas == 0:
+        print("Nenhuma ação com variação positiva encontrada na lista.")
+
+def mediaValor(lista_acoes_completa):
+    num_colunas = 5
+    dados_acoes_lista_plana = lista_acoes_completa[num_colunas:]
+
+    # Lista para armazenar apenas os valores numéricos das ações
+    todos_os_valores = []
+
+    for i in range(0, len(dados_acoes_lista_plana), num_colunas):
+        if i + num_colunas <= len(dados_acoes_lista_plana):
+            bloco_acao = dados_acoes_lista_plana[i : i + num_colunas]
+            valor_stg = bloco_acao[3] 
+
+            try:
+                # Converter a string para float
+                valor_flt = float(valor_stg.replace(',', '.'))
+                
+                # Adicionar o valor float à nossa lista de valores
+                todos_os_valores.append(valor_flt)
+            except ValueError:
+                # Lidar com casos onde a conversão pode falhar (ex: string vazia ou mal formatada)
+                print(f"Aviso: Valor '{valor_stg}' não pôde ser convertido para float. Pulando este registro.")
+            except IndexError:
+                # Caso o bloco_acao não tenha o índice esperado
+                print(f"Aviso: Bloco de ação incompleto. Pulando este registro.")
+                
+    #calcular a soma e a média
+    if todos_os_valores: # Verificar se a lista não está vazia para evitar divisão por zero
+        soma_total = sum(todos_os_valores)
+        media = soma_total / len(todos_os_valores)
+        print(f"A média do valor das ações é: {media:.2f}")
+    else:
+        print("Não foram encontrados valores de ações para calcular a média.")
+
+
+#acoesPositivas(acoes)
+#analisarAcoes(acoes)
+mediaValor(acoes)
