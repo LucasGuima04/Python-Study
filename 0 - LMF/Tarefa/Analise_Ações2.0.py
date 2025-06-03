@@ -435,7 +435,7 @@ def iterarBlocosAcoes(lista_acoes_completa):
 def analisarAcoes(lista_acoes_completa):
     lista_de_acoes_processadas = []
 
-    for ticker, nome, negocios_str, _, _ in iterar_blocos_acoes(lista_acoes_completa):
+    for ticker, nome, negocios_str, _, _ in iterarBlocosAcoes(lista_acoes_completa):
         # O '_' é usado para indicar que não vamos usar valor_str e variacao_stg nesta função
         try:
             # Limpar a string de negócios (remover '.') e converter para inteiro
@@ -464,7 +464,7 @@ def analisarAcoes(lista_acoes_completa):
 def acoesPositivas(lista_acoes_completa):
     lista_de_acoes_processadas = []
 
-    for ticker, _, _, _, variacao_stg in iterar_blocos_acoes(lista_acoes_completa):
+    for ticker, _, _, _, variacao_stg in iterarBlocosAcoes(lista_acoes_completa):
         # O '_' é usado para nome, negocios_str, valor_str
         try:
             # Limpar a string de variação e converter para float
@@ -497,7 +497,7 @@ def mediaValor(lista_acoes_completa):
     soma_valores = 0.0
     contador_acoes_validas = 0
 
-    for ticker, _, _, valor_str, _ in iterar_blocos_acoes(lista_acoes_completa):
+    for ticker, _, _, valor_str, _ in iterarBlocosAcoes(lista_acoes_completa):
         # O '_' é usado para nome, negocios_str, variacao_stg
         try:
             # Limpar a string para converte para float
