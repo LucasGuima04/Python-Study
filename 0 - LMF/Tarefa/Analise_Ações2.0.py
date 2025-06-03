@@ -402,7 +402,7 @@ acoes = ["Ticker","Nome","Negócios","Última (R$)","Variação",
 "BALM3","Baumer","100","16,30","-1,81%"
 ]
 
-def iterar_blocos_acoes(lista_acoes_completa):
+def iterarBlocosAcoes(lista_acoes_completa):
     """
     Itera sobre a lista de ações, pula o cabeçalho e extrai os dados brutos
     de cada ação como strings.
@@ -418,7 +418,7 @@ def iterar_blocos_acoes(lista_acoes_completa):
     # Os primeiros 'num_colunas' elementos são o cabeçalho, então pulamos eles.
     dados_acoes_lista_plana = lista_acoes_completa[num_colunas:]
 
-    # Iteramos sobre la lista plana, pegando 'num_colunas' elementos de cada vez
+    # Iteramos sobre a lista plana, pegando 'num_colunas' elementos de cada vez
     for i in range(0, len(dados_acoes_lista_plana), num_colunas):
         # Garante que temos um bloco completo de dados para uma ação
         if i + num_colunas <= len(dados_acoes_lista_plana):
@@ -501,9 +501,7 @@ def mediaValor(lista_acoes_completa):
         # O '_' é usado para nome, negocios_str, variacao_stg
         try:
             # Limpar a string para converte para float
-            valor_limpo_str = valor_str.replace(',', '.')
-            # Caso -> "1.234,56", a limpeza seria:
-            # valor_limpo_str = valor_str.replace('.', '').replace(',', '.')
+            valor_limpo_str = valor_str.replace('.', '').replace(',', '.')
             
             valor_float = float(valor_limpo_str)
             
